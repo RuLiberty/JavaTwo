@@ -44,7 +44,7 @@ public class MainClass {
                 }
             }
         } catch (Exception e) {
-            new MyArrayDataException(l, r);
+            throw new MyArrayDataException(l, r);
         }
     return sum;
     }
