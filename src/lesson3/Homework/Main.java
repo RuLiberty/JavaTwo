@@ -49,21 +49,34 @@ public class Main {
 
 //Количество уникальных объектов в list
 private static void countUniqObj(List<String> list) {
-    Set<String> set = new HashSet<>();
-        for (String s:list) {
-            set.add(s);
+    Map map = new HashMap<String, Integer>();
+    for (int i = 0; i < list.size(); i++) {
+        if (!map.containsKey(list.get(i))) {
+            map.put(list.get(i),1);
+        } else {
+            map.replace(list.get(i),(int)(map.get(list.get(i)))+1);
         }
-    System.out.println("Уникальные слова с количеством повторений: ");
-        String[] setArray = set.toArray(new String[set.size()]);
-        String[] listArray = list.toArray(new String[list.size()]);
-        for (int k = 0; k < set.size(); k++) {
-            int count = 0;
-            for (int i = 0; i < list.size(); i++) {
-                if (setArray[k].equalsIgnoreCase(listArray[i])) {count++;}
-            }
-            System.out.println(setArray[k] + ": встречается " + count + " раз");
-        }
-    System.out.println("Количество уникальных слов: " + set.size());
+    }
+    for (int i = 0; i < map.size(); i++)
+    {
+        System.out.println("Слово:");
+    }
+
+//        Set<String> set = new HashSet<>();
+//        for (String s:list) {
+//            set.add(s);
+//        }
+//    System.out.println("Уникальные слова с количеством повторений: ");
+//        String[] setArray = set.toArray(new String[set.size()]);
+//        String[] listArray = list.toArray(new String[list.size()]);
+//        for (int k = 0; k < set.size(); k++) {
+//            int count = 0;
+//            for (int i = 0; i < list.size(); i++) {
+//                if (setArray[k].equalsIgnoreCase(listArray[i])) {count++;}
+//            }
+//            System.out.println(setArray[k] + ": встречается " + count + " раз");
+//        }
+//    System.out.println("Количество уникальных слов: " + set.size());
 }
 
 //  Генерация случайных слов максимальной длины 2
