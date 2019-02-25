@@ -49,10 +49,32 @@ public class Main {
 
 //Количество уникальных объектов в list
 private static void countUniqObj(List<String> list) {
-    Set<String> set = new HashSet<>();
+    System.out.println("1 способ: ");
+    Map map = new HashMap<String, Integer>();
+    for (int i = 0; i < list.size(); i++) {
+        if (!map.containsKey(list.get(i))) {
+            map.put(list.get(i),1);
+        } else {
+            map.replace(list.get(i),(int)(map.get(list.get(i)))+1);
+        }
+    }
+    Iterator itr = map.entrySet().iterator();
+    int countWord = 0;
+    while(itr.hasNext()) {
+        Map.Entry entry = (Map.Entry) itr.next();
+        System.out.println("Слово " + entry.getKey() + ": встречается " + entry.getValue() + " раз" );
+        countWord++;
+    }
+    System.out.println("Количество уникальных слов: " + countWord);
+
+
+        Set<String> set = new HashSet<>();
         for (String s:list) {
             set.add(s);
         }
+    System.out.println();
+    System.out.println();
+    System.out.println("2 способ: ");
     System.out.println("Уникальные слова с количеством повторений: ");
         String[] setArray = set.toArray(new String[set.size()]);
         String[] listArray = list.toArray(new String[list.size()]);
