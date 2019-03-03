@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
 // При «отсылке» сообщение перекидывается из нижнего поля в центральное.
 
 
-public class Main extends JFrame {
+public class MainWindow extends JFrame {
     public static void main(String[] args) {
-        new Main();
+        new MainWindow();
     }
 
-    public Main() {
+    public MainWindow() {
         // Параметры окна
         super("ЧерЧат");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
