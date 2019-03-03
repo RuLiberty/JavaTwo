@@ -25,7 +25,12 @@ public class Main {
 
     static void getArr(float[] arr){
         MyThread thread = new MyThread(arr);
-        thread.run();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     static void threadGetArr(float[] arr){
@@ -40,6 +45,13 @@ public class Main {
 
         MyThread thread2 = new MyThread(arr);
         thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
