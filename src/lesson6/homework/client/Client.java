@@ -7,37 +7,54 @@ public class Client
 {
     public static void main(String[] args)
     {
-        try (Socket s = new Socket("localhost", 3345);
-             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try{
 
-             DataOutputStream dataOutputStream = new DataOutputStream(s.getOutputStream());
-            DataInputStream dataInputStream = new DataInputStream(s.getInputStream()))
-        {
+            Socket s = new Socket("localhost", 3345);
+            System.out.println("connect to server...");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            DataOutputStream dataOutputStream = new DataOutputStream(s.getOutputStream());
+            DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
+
             System.out.println("Client connected with server");
+
+            try {
+                Thread threadHeard = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            while (!s.isClosed()) {
+                                String msg = dataInputStream.readUTF();
+                                System.out.println("Server say: " + msg);
+                                System.out.println();
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                            System.out.println("Unknown error!");
+                        }
+                    }
+                });
+
+                threadHeard.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Unknown error!");
+            }
 
 
             while (!s.isOutputShutdown())
             {
                 if (br.ready())
                 {
-                    System.out.println("Client is writing...");
-                    Thread.sleep(1000);
-                    String msg = br.readLine();
-
-                    dataOutputStream.writeUTF(msg);
-                    dataOutputStream.flush();
-                    System.out.println("Client sent message = " + msg);
-                    Thread.sleep(4000);
+                    String msg = br.readLine(); // чтение сроки
+                    dataOutputStream.writeUTF(msg); // отправление сообщения серверу
+                    dataOutputStream.flush(); // очистка
 
                     if (msg.equalsIgnoreCase("quit"))
                     {
                         System.out.println("Client kill connection");
-                        Thread.sleep(2000);
                         break;
                     }
-
-                    System.out.println("We are going to work....");
-
                 }
             }
 
@@ -45,7 +62,8 @@ public class Client
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
+            System.out.println("Error on Client");
         }
 
     }
