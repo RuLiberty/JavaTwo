@@ -15,8 +15,8 @@ public class MainClass
     ExampleClass exampleClass = new ExampleClass();
     exampleClass.sum(a, b);
 
-    System.out.println(" A in Main = " + a);
-    System.out.println(" B in Main = " + b);
+    System.out.println(" A in MainWindow = " + a);
+    System.out.println(" B in MainWindow = " + b);
     */
 
     LinkedExampleClass exampleClass = new LinkedExampleClass();
