@@ -9,7 +9,7 @@ public class Client
     {
         try{
 
-            Socket s = new Socket("localhost", 3345);
+            Socket s = new Socket("localhost", 8888);
             System.out.println("connect to server...");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
