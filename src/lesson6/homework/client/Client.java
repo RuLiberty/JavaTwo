@@ -7,14 +7,18 @@ public class Client
 {
     public static void main(String[] args)
     {
-        try{
 
+        try{
             Socket s = new Socket("localhost", 8888);
             System.out.println("connect to server...");
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             DataOutputStream dataOutputStream = new DataOutputStream(s.getOutputStream());
             DataInputStream dataInputStream = new DataInputStream(s.getInputStream());
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Enter your name!");
+            String name = br.readLine();
+            dataOutputStream.writeUTF(name);
+            dataOutputStream.flush();
 
             System.out.println("Client connected with server");
 

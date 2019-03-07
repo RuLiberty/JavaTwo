@@ -23,8 +23,11 @@ public class Server
                 clientSocket = serverSocket.accept();
                 System.out.println("User connected");
                 ClientHandler client = new ClientHandler(clientSocket, this);
-                clientHandlers.add(client);
-                new Thread(client).start();
+                if (client.isAuth()) {
+                    System.out.println("Проверка прошла успешно!");
+                    clientHandlers.add(client);
+                    new Thread(client).start();
+                } else throw new Exception("Ошибка! Связь разорвана!");
             }
         }
         catch (Exception e)
@@ -72,6 +75,9 @@ public class Server
         clientHandlers.remove(clientHandler);
     }
 
+    public List<ClientHandler> getClientHandlers() {
+        return clientHandlers;
+    }
 
 }
 

@@ -1,5 +1,6 @@
 package lesson7.server;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -13,8 +14,18 @@ public class ClientHandler implements Runnable
     private String name;
     private static int clientCount = 0;
 
+    private boolean isAuth = false;
+
     public String getName(){
         return name;
+    }
+
+    public boolean isAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(boolean auth) {
+        isAuth = auth;
     }
 
     public ClientHandler(Socket clientSocket, Server server)
@@ -26,6 +37,8 @@ public class ClientHandler implements Runnable
             this.server = server;
             this.outMsg = new PrintWriter(clientSocket.getOutputStream());
             this.inMsg = new Scanner(clientSocket.getInputStream());
+            this.name = inMsg.nextLine();
+            this.isAuth = this.auth();
         }
         catch (Exception e)
         {
@@ -38,32 +51,31 @@ public class ClientHandler implements Runnable
     {
         try
         {
-            server.notificationAllClientWithNewMessage("New client in our chat");
-            server.notificationAllClientWithNewMessage("In our chat = " + clientCount + "clients!");
+            if (this.isAuth()) {
+                server.notificationAllClientWithNewMessage("New client in our chat");
+                server.notificationAllClientWithNewMessage("In our chat = " + clientCount + "clients!");
 
 
-            while (true)
-            {
-                if (inMsg.hasNext())
-                {
-                    String clientMsg = inMsg.nextLine();
-                    if (clientMsg.equalsIgnoreCase("QUIT"))
-                    {
-                        break;
-                    }
-                    else if (clientMsg.startsWith("\\w")){
-                        String[] tokens = clientMsg.split("\\s");
-                        String toClient = tokens[1];
-                        String msg = clientMsg.substring(4 + toClient.length());
-                        server.sendMsgToClient(this, toClient, clientMsg);
-                    } else {
-                        System.out.println(clientMsg);
-                        server.notificationAllClientWithNewMessage(clientMsg);
+                while (true) {
+                    if (inMsg.hasNext()) {
+                        String clientMsg = inMsg.nextLine();
+                        if (clientMsg.equalsIgnoreCase("QUIT")) {
+                            break;
+                        } else if (clientMsg.startsWith("\\w")) {
+                            String[] tokens = clientMsg.split("\\s");
+                            String toClient = tokens[1];
+                            String msg = clientMsg.substring(4 + toClient.length());
+                            server.sendMsgToClient(this, toClient, clientMsg);
+                        } else {
+                            System.out.println(clientMsg);
+                            server.notificationAllClientWithNewMessage(clientMsg);
+                        }
                     }
                 }
-            }
 
-            Thread.sleep(1000);
+                Thread.sleep(1000);
+            }
+            else throw new Exception("Не удалось подключится к серверу, попробуйте позднее");
         }
         catch (Exception e)
         {
@@ -94,6 +106,13 @@ public class ClientHandler implements Runnable
         {
             e.printStackTrace();
         }
+    }
+
+    public boolean auth() {
+        for (ClientHandler clientHandler : server.getClientHandlers()) {
+            if (clientHandler.getName().equals(name)){return false;}
+        }
+        return true;
     }
 }
 
